@@ -7,4 +7,4 @@ def home(request):
 def hi(request):
     return HttpResponse("<h1 style='color : green'>HI , I am here</h1>")
 def show(request):
-    return HttpResponse("this is task Page")
+    return HttpResponse("this is task Page !")
