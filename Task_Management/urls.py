@@ -20,8 +20,8 @@ from tasks.views import home
 from tasks import views
 
 urlpatterns = [
-    path('admin', admin.site.urls),
-    path("hi/",views.hi),
-    path("home/", home ),
+    path('admin/', admin.site.urls),
+    path("hii/",views.hi),
+    path("", home ),
     path("tasks/",include("tasks.urls"))
 ]
