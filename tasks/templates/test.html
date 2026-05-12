@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context</title>
+    <link rel="stylesheet" href="{% static "CSS/output.css" %}">
+</head>
+<body>
+    <h1 class="text-5xl mt-5">{{front}}</h1>
+   <div class="mt-5"> <h1 class="bg-red-100 text-2xl">Hello this is Test.html</h1></div>
+
+    {{Name}}
+    {{age}}
+<br>
+    {% for o in Name %}
+     {{o}}
+     <div class="text-amber-500 text-5xl">{{o}}</div>
+     <br>
+{% endfor %}
+
+<ol class="list-decimal pl-5">
+{% for i in age %}
+{% if i !=  "Age" %}
+<li>{{i}}</li>
+{% endif %}
+
+{% endfor %}
+
+</ol>
+
+{% with cnt=10 %}
+  {{cnt}}
+{% endwith %}
+
+
+
+</body>
+</html>

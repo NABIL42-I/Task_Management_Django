@@ -1,3 +1,46 @@
 from django.db import models
 
 # Create your models here.
+
+#one project can have many task
+class Employee(models.Model):
+    name = models.CharField(max_length=100)
+    email=models.EmailField(unique=True)
+
+
+class Task(models.Model):
+
+    #Many to One
+    project=models.ForeignKey("Project",on_delete=models.CASCADE ,default=1)
+
+    #Many to Many
+    assigned_to=models.ManyToManyField(Employee)
+
+    title = models.CharField(max_length=250)
+    description = models.TextField()
+    is_completed= models.BooleanField(default=False)
+    created_at= models.DateTimeField(auto_now_add=True)
+    updated_at= models.DateTimeField(auto_now=True)
+    
+#One to One 
+
+# One task only have one task_detail
+class Task_detail(models.Model):
+    HIGH = 'H'
+    MEDIUM ='M'
+    LOW ='L'
+    PRIORITY_OPTIONS = (
+        (HIGH,"HIGH"),
+        (MEDIUM,"MEDIUM"),
+        (LOW,"LOW")
+    )
+    #taskdetail_set ->autometically create after build OneToOne rlt
+    task = models.OneToOneField(Task, on_delete=models.CASCADE ,related_name="New_Details" )
+    assigned_to = models.CharField(max_length=100)                       #reverse relation
+    priority = models.CharField(max_length=1,choices= PRIORITY_OPTIONS,default="L")
+    
+#Many to one
+#one project can have many task
+class Project(models.Model):
+    name = models.CharField(max_length=100)
+    start_date=models.DateTimeField(auto_now_add=True)

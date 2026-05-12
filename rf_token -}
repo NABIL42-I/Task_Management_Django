@@ -1,0 +1,48 @@
+[33mcommit db8af7377d2a447f6e9200701710eefd0dae01e1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmodule-4[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mmodule-g[m[33m, [m[1;32mmodule-6[m[33m, [m[1;32mmodule-5[m[33m, [m[1;32mmain[m[33m)[m
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 18:41:00 2026 +0600
+
+    Task_Management_Update
+
+[33mcommit eccce3f17f1dfff165f50b63a7d15bf0f3b342f5[m
+Merge: 7531e1e 930443a
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 18:37:04 2026 +0600
+
+    Resolved merge conflict
+
+[33mcommit 930443a5b0e232a14a2e60e69e861d265d7fbbc7[m[33m ([m[1;32mDynamic_urls[m[33m)[m
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 18:17:49 2026 +0600
+
+    Update3 on Dynaminc_urls
+
+[33mcommit 425d415e0c5789a13f338bb2f30184efb9a267d4[m
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 18:16:08 2026 +0600
+
+    Update Dynamic_urls
+
+[33mcommit bb021beefd54109db25930187e46149a0c512f54[m
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 18:13:38 2026 +0600
+
+    Update
+
+[33mcommit 7531e1e66287c73041651cdfed127c7cee0c27f2[m
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 18:11:32 2026 +0600
+
+    Main Bracnh
+
+[33mcommit 3117c0666f786a1a7be1cd63a5d115b6e7febd04[m
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 18:05:31 2026 +0600
+
+    Dynamic url implemented
+
+[33mcommit 842822011f3499adf4c7ab1f4a509e1559a336d6[m
+Author: Nabil <nabilehsanul@gmail.com>
+Date:   Sat May 9 16:41:26 2026 +0600
+
+    Initail Project Done
