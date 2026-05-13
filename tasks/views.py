@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from tasks.forms import TaskForm
+from tasks.models import *
 
 
 
@@ -27,7 +29,38 @@ def test(request):
 
 
 def task_form(request):
-    return render(request,"task_form.html")
+    employees = Employee.objects.all()
+    # Create object
+    form = TaskForm(employees=employees)
+    if request.method == "POST":
+        form = TaskForm(request.POST,employees=employees)
+        #Data  Validate & clean
+        if form.is_valid():
+                    # print(form.cleaned_data)
+                    data = form.cleaned_data #return dictionary
+                    title=data.get('title') #title = data['title']
+                    description = data.get('description')
+                    due_date = data.get('due_date')
+                    assigned_to = data.get('assigned_to')
+                    task = Task.objects.create(title=title,description=description,due_date=due_date)
+                    #Assign employee to tasks
+                    for emp_id in assigned_to:
+                         employee = Employee.objects.get(id=emp_id)
+                         task.assigned_to.add(employee)
+
+    context={"form":form}
+    return render(request,"task_form.html",context)
+
+
+
+
+
+
+
+
+
+
+
 
 # Create your views here.
 # def home(request):

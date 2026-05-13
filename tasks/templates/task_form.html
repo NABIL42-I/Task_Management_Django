@@ -9,10 +9,7 @@
     
 <form method="POST">
      {% csrf_token %}
-     <label for="">Title</label>
-     <input type="text" name="title">
-     <label for="">Number</label>
-     <input type="number" name="number">
+     {{form.as_p}}
     <button type="submit">Submit</button>
     
 </form>
