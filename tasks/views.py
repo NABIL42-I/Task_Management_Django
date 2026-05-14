@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from tasks.forms import TaskForm
+from tasks.forms import TaskForm,TaskModelForm
 from tasks.models import *
 
 
@@ -29,24 +29,16 @@ def test(request):
 
 
 def task_form(request):
-    employees = Employee.objects.all()
+    # employees = Employee.objects.all()
     # Create object
-    form = TaskForm(employees=employees)
+    form = TaskModelForm()
     if request.method == "POST":
-        form = TaskForm(request.POST,employees=employees)
+        form = TaskModelForm(request.POST)
         #Data  Validate & clean
         if form.is_valid():
-                    # print(form.cleaned_data)
-                    data = form.cleaned_data #return dictionary
-                    title=data.get('title') #title = data['title']
-                    description = data.get('description')
-                    due_date = data.get('due_date')
-                    assigned_to = data.get('assigned_to')
-                    task = Task.objects.create(title=title,description=description,due_date=due_date)
-                    #Assign employee to tasks
-                    for emp_id in assigned_to:
-                         employee = Employee.objects.get(id=emp_id)
-                         task.assigned_to.add(employee)
+            form.save()
+            # return HttpResponse("HI")
+            return render(request,"task_form.html",{"form":form , "massage":"Task Added Succesfully"})
 
     context={"form":form}
     return render(request,"task_form.html",context)
@@ -54,9 +46,34 @@ def task_form(request):
 
 
 
+# FORM MANUALLY
 
+# def task_form(request):
+#     employees = Employee.objects.all()
+#     # Create object
+#     form = TaskModelForm()
+#     if request.method == "POST":
+#         form = TaskModelForm(request.POST)
+#         #Data  Validate & clean
+#         if form.is_valid():
+#                     """For ModelForm Data"""
+#                     form.save()
+#                     '''For Django Form Data'''
+#                     # # print(form.cleaned_data)
+#                     # data = form.cleaned_data #return dictionary
+#                     # title=data.get('title') #title = data['title']
+#                     # description = data.get('description')
+#                     # due_date = data.get('due_date')
+#                     # assigned_to = data.get('assigned_to')
+#                     # task = Task.objects.create(title=title,description=description,due_date=due_date)
+#                     # #Assign employee to tasks
+#                     # for emp_id in assigned_to:
+#                     #      employee = Employee.objects.get(id=emp_id)
+#                     #      task.assigned_to.add(employee)
+#                     return HttpResponse("Task ADD")
 
-
+#     context={"form":form}
+#     return render(request,"task_form.html",context)
 
 
 
