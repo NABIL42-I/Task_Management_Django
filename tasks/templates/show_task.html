@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+         <ol>
+        {% comment %}#here tasks is full table of Task and task is the only one obj {% endcomment %}
+        {% comment %} {{tasks}} {% endcomment %}
+    {% comment %} {% for project in tasks  %}            {% endcomment %}
+             {% comment %} <li>
+                <p>{{project.name}}
+                    #one to many
+                    {% for task in project.task_set.all  %}
+                    <p>{{task.title}}</p>
+                    {% endfor %}
+
+
+             </li> {% endcomment %}
+         {% comment %} {% endfor %} {% endcomment %}
+         </ol>
+    </div>
+    {{tasks}}
+
+    {% comment %} {{task1.title}} {% endcomment %}
+</body>
+</html>

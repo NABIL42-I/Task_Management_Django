@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from debug_toolbar.toolbar import debug_toolbar_urls
+
 # from tasks.views import home
 from tasks import views
 
@@ -24,4 +26,4 @@ urlpatterns = [
     # path("hii/",views.hi),
     # path("home/", home ),
     path("tasks/",include("tasks.urls"))
-]
+]+ debug_toolbar_urls()

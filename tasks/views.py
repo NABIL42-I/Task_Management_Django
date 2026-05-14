@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from tasks.forms import TaskForm,TaskModelForm
 from tasks.models import *
-
+from datetime import date
+from django.db.models import Q,Count
 
 
 
@@ -42,6 +43,33 @@ def task_form(request):
 
     context={"form":form}
     return render(request,"task_form.html",context)
+
+
+def view_task(request):
+    #retrive all data from tasks model
+    tasks = Task.objects.all()
+    #retrive a specific task
+    # task1 = Task.objects.get(pk=1)#pk = primary key or use id
+    # task1 = Task.objects.first()#fetch first task
+    # tasks = Task.objects.filter(status="PENDING") #FILTER
+    
+    #show the task which due_date is today
+    # tasks=Task.objects.filter(due_date=date.today())
+
+    #show the task whoose priority is not low
+    # tasks = Task_detail.objects.exclude(priority='L')
+
+    '''show the task that contain word 'o' and  status='IN_Progress'''
+    tasks = Task.objects.filter(title__icontains="O",status='IN_PROGRESS')
+
+    '''show the task that contain word 'o' OR  status='IN_Progress'''
+    # tasks = Task.objects.filter(Q(title__icontains="O")|Q(status='IN_PROGRESS'))
+
+    # tasks= Task.objects.select_related('New_Details').all()
+    # tasks = Project.objects.prefetch_related('task_set').all()   
+
+    tasks= Task.objects.aggregate(num=Count('title'))
+    return render(request,"show_task.html",{"tasks":tasks,"hi":5})
 
 
 

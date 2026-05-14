@@ -8,10 +8,12 @@ urlpatterns =[
     path("user/",views.user),
     path("test_static/",views.test_static),
     path("test/",views.test),
-    path("task_form/",views.task_form)
+    path("task_form/",views.task_form),
+    path("view_task/",views.view_task)
     
+
+]
+    #Dynamic 
     # path('show-task/',views.show),
     # path('show-task/<int:id>/',views.nshow)
     # # path('show-task/<int:id>', views.nshow)
-]
-
