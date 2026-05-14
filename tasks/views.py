@@ -11,7 +11,20 @@ def dashboard(request):
     return render(request,"Dashboard/dashboard.html")
 
 def manager(request):
-    return render(request,"Dashboard/manager_d.html")
+    tasks = Task.objects.all()
+    #Getting task count
+    total_tasks = tasks.count()
+    pending = tasks.filter(status="PENDING").count()
+    completed=tasks.filter(status="COMPLETED").count()
+    in_progress=tasks.filter(status="IN_PROGRESS").count()
+    context={
+        'tasks':tasks,
+        'total_tasks':total_tasks,
+        'pending':pending,
+        'completed':completed,
+        'in_progress':in_progress
+    }
+    return render(request,"Dashboard/manager_d.html",context)
 
 def user(request):
     return render(request,"Dashboard/user_d.html")
