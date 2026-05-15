@@ -51,14 +51,17 @@
       </header>
 
       <main>
-        <!-- Stats Grid  -->
+        {% comment %} <!-- Stats Grid  --> {% endcomment %}
         <div class="grid grid-cols-4 gap-6 mb-8 mt-8">
-          <!-- Total Task  -->
+
+          {% comment %}By-Default {% endcomment %}
+          {% comment %} <!-- Total Task  --> {% endcomment %}
+          <a href="{% url 'manager' %}"> 
           <div class="bg-white rounded-xl p-6 shadow-sm">
             <h3 class="text-sm font-medium text-gray-500 mb-4">TOTAL TASK</h3>
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-3xl font-semibold mb-1">{{total_tasks}}</p>
+                <p class="text-3xl font-semibold mb-1">{{counts.total}}</p>
                 <p class="text-gray-500 text-sm">11 last month</p>
               </div>
               <div class="bg-blue-100 p-3 rounded-full">
@@ -79,14 +82,18 @@
               </div>
             </div>
           </div>
-          <!-- Completed Task  -->
+          </a>
+
+
+          {% comment %} <!-- Completed Task  --> {% endcomment %}
+           <a href="{% url 'manager' %}?type=completed">
           <div class="bg-white rounded-xl p-6 shadow-sm">
             <h3 class="text-sm font-medium text-gray-500 mb-4">
               COMPLETED TASK
             </h3>
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-3xl font-semibold mb-1">{{completed}}</p>
+                <p class="text-3xl font-semibold mb-1">{{counts.completed}}</p>
                 <p class="text-gray-500 text-sm">11 last month</p>
               </div>
               <div class="bg-green-300 p-3 rounded-full">
@@ -107,14 +114,18 @@
               </div>
             </div>
           </div>
-          <!-- Task In Progress  -->
+          </a>
+
+
+          {% comment %} <!-- Task In Progress  --> {% endcomment %}
+          <a href="{% url 'manager' %}?type=in_progress">
           <div class="bg-white rounded-xl p-6 shadow-sm">
             <h3 class="text-sm font-medium text-gray-500 mb-4">
               TASK IN PROGRESS
             </h3>
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-3xl font-semibold mb-1">{{in_progress}}</p>
+                <p class="text-3xl font-semibold mb-1">{{counts.in_progress}}</p>
                 <p class="text-gray-500 text-sm">11 last month</p>
               </div>
               <div class="bg-yellow-100 p-3 rounded-full">
@@ -135,11 +146,16 @@
               </div>
             </div>
           </div>
+          </a>
+
+
+               {% comment %} TODO {% endcomment %}
+          <a href="{% url 'manager' %}?type=pending">
           <div class="bg-white rounded-xl p-6 shadow-sm">
             <h3 class="text-sm font-medium text-gray-500 mb-4">TODOS</h3>
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-3xl font-semibold mb-1">{{pending}}</p>
+                <p class="text-3xl font-semibold mb-1">{{counts.pending}}</p>
                 <p class="text-gray-500 text-sm">11 last month</p>
               </div>
               <div class="bg-purple-100 p-3 rounded-full">
@@ -160,7 +176,25 @@
               </div>
             </div>
           </div>
+          </a>
+
+
         </div>
+        
+       {% if messages %}
+    {% for message in messages %}
+        <div class="px-2 py-1 
+            {% if message.tags == 'success' %}
+                bg-green-500
+            {% elif message.tags == 'error' %}
+                bg-red-500
+            {% endif %}
+        ">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
        {% block tasks %} {% endblock tasks %}
 
        {% block user %} {% endblock user %}
@@ -170,3 +204,4 @@
 </html>
 
 
+{% comment %} {% elif  %} {% endcomment %}

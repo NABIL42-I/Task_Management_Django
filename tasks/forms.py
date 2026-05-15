@@ -78,3 +78,12 @@ class TaskModelForm(StyleForMixin, forms.ModelForm):
         super().__init__(*args,**kwargs) #Unpack
         self.apply_styled_widgets()
 
+
+class TaskDetailModelForm(StyleForMixin,forms.ModelForm):
+    class Meta:
+        model = Task_detail
+        fields = ["priority","notes"]
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs) #Unpack
+        self.apply_styled_widgets()
+

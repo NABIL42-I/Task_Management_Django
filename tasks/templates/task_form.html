@@ -7,16 +7,19 @@
     <link rel="stylesheet" href="{% static "CSS/output.css" %}">
     <title>Document</title>
 </head>
-<body>
-    <div class="w-1/2 mx-auto  mt-8">
-    <div>
-        {% if massage %}
-    <p>{{massage}}</p>
-    {% endif %}
-</div>
+<body class="bg-green-300">
+<div class="w-1/2 mx-auto  mt-8">
+{% if messages %}
+{% for message in messages %}
+   <div class="px-2 py-1 {% if message.tags == 'success' %} bg-green-500{% endif%}">{{message}}</div>
+{% endfor %}
+{% endif %}
+
+
 <form method="POST">
      {% csrf_token %}
-     {{form.as_p}}
+     {{task_form}}
+     {{task_detail_form}}
     <button type="submit"class=" p-2 mt-4 text-white rounded-lg bg-red-500 ">Submit</button>
     </div>
     
