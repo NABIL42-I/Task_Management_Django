@@ -1,6 +1,8 @@
 from django import forms
 from tasks.models import *
 
+
+# Manual Form Creation (Not model form)
 class TaskForm(forms.Form):
     title = forms.CharField(max_length=250,label='Task Title')
     description = forms.CharField(widget=forms.Textarea ,label='Task Description')
@@ -20,16 +22,26 @@ class TaskForm(forms.Form):
 
 """ Mixing to apply style to form field"""
 class StyleForMixin:
+    def __init__(self,*args,**kwargs):
+      super().__init__(*args,**kwargs) #Unpack
+      self.apply_styled_widgets()
+
     default_classes = "border border-gray-300 w-full rounded-lg shadow-md focus:border-red-800 focus:ring-rose-500"
 
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
             # print(field_name)
+            label = field.label or field_name
             if isinstance(field.widget,forms.TextInput):
                 field.widget.attrs.update({
                     'class':self.default_classes,
                     'placeholder':f"Enter {field.label.lower()}"
                 })
+
+            # elif field.widget.input_type == 'password':
+            elif isinstance(field.widget,forms.PasswordInput):
+             field.widget.attrs.update({ 'class': self.default_classes,  'placeholder': f"Enter {label.lower()}" })
+
             elif isinstance(field.widget,forms.Textarea):
                 field.widget.attrs.update({
                     'class':self.default_classes,
@@ -45,6 +57,9 @@ class StyleForMixin:
                 field.widget.attrs.update({
                     'class':"space-y-2"
                 })
+            else:
+                field.widget.attrs.update({ 'class': self.default_classes,  'placeholder': f"Enter {label.lower()}" })
+                
 
 
 #Django Model Form
@@ -57,6 +72,7 @@ class TaskModelForm(StyleForMixin, forms.ModelForm):
             'due_date':forms.SelectDateWidget,
             'assigned_to':forms.CheckboxSelectMultiple
         }
+        
         # exclude = ['project']
         """Mannual widget """
         # widgets = {
@@ -74,16 +90,17 @@ class TaskModelForm(StyleForMixin, forms.ModelForm):
         #     })
         # }
     '''Using Mixing Widget'''
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs) #Unpack
-        self.apply_styled_widgets()
+    # def __init__(self,*args,**kwargs):
+    #     super().__init__(*args,**kwargs) #Unpack
+    #     self.apply_styled_widgets()
+
 
 
 class TaskDetailModelForm(StyleForMixin,forms.ModelForm):
     class Meta:
         model = Task_detail
         fields = ["priority","notes"]
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs) #Unpack
-        self.apply_styled_widgets()
+    # def __init__(self,*args,**kwargs):
+    #     super().__init__(*args,**kwargs) #Unpack
+    #     self.apply_styled_widgets()
 

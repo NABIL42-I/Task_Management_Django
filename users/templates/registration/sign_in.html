@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+{% comment %} <link rel="stylesheet" href="{% static "CSS/output.css" %}"> {% endcomment %}
+</head>
+<body>
+    <h1>Welcome to Authentication</h1>
+
+
+
+<div>
+  <form method="POST">
+    {% csrf_token %}
+    <label for="12">Username</label>
+<input name="username" id="12"  type="text" placeholder="Enter Your Username">
+
+    <label for="pass">Password</label>
+<input name="password" id="pass" type="text" placeholder="Enter Your Password">
+
+    <button type="submit">Submit</button>
+   {% comment %} Data is sent like: username=ean&password=123 {% endcomment %}
+  </form>
+</div>
+
+
+</body>
+</html>
+

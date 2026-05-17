@@ -23,7 +23,7 @@ from tasks import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path("hii/",views.hi),
-    # path("home/", home ),
-    path("tasks/",include("tasks.urls"))
+    path("tasks/",include("tasks.urls")),
+    path("users/",include("users.urls")),
+    path("core/",include("core.urls"))
 ]+ debug_toolbar_urls()

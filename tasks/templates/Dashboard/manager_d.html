@@ -23,6 +23,7 @@
                 {% comment %} Update_task {% endcomment %}
                 <span>{{task.title}}</span> 
                 <a href="{% url "update_task" task.id %}" class="px-2 py-1 bg-green-300">Edit</a>
+                
                 {% comment %} Delete_task {% endcomment %}
                 <form action="{% url "delete_task" task.id %}"method="POST">
                   {% csrf_token %}

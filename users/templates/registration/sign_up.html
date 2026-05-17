@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="{% static "CSS/output.css" %}">
+</head>
+<body>
+    <h1>Welcome to Authentication</h1>
+
+
+    {% comment %} Read form field Documentation {% endcomment %}
+<div>
+
+    {% comment %} non-field-error {% endcomment %}
+    {% if form.non_field_errors %}
+     {% for error in form.non_field_errors %}
+       {{error}}
+     {% endfor %}
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+    {% comment %} field-error {% endcomment %}
+        {% for field in form %}
+        <p>
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+
+            {{ field }}
+
+            {% if field.errors %}
+            <ul>
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </p>
+        {% endfor %}
+
+        <button type="submit">Sign_up</button>
+    </form>
+</div>
+
+
+</body>
+</html>
+
+
+
+{% comment %} <form action="{% url "create_task" %}",method="POST">
+    {{form.as_p}}
+    <Button type="submit">Submit</Button>
+</form> {% endcomment %}
