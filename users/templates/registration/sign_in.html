@@ -1,18 +1,39 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-{% comment %} <link rel="stylesheet" href="{% static "CSS/output.css" %}"> {% endcomment %}
-</head>
-<body>
-    <h1>Welcome to Authentication</h1>
+{% extends "base.html" %}
+{% block content %}
 
 
+<div class="w-1/2 mx-auto my-9">
+
+   {% if messages %}
+    {% for message in messages %}
+        <div class="px-2 py-1 {% if message.tags == 'success' %} bg-green-500 {% endif %}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% comment %} {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+        {{ error }}
+    {% endfor %}
+{% endif %} {% endcomment %}
 
 <div>
+  <form method="POST">
+    {% csrf_token %}
+           {{form}}
+    <button type="submit" class="bg-blue-500 px-2 py-1 rounded text-white mt-3">Submit</button>
+   {% comment %} Data is sent like: username=ean&password=123 {% endcomment %}
+  </form>
+</div>
+
+
+</div>
+
+{% endblock content %}
+
+
+{% comment %} <div>
   <form method="POST">
     {% csrf_token %}
     <label for="12">Username</label>
@@ -22,11 +43,6 @@
 <input name="password" id="pass" type="text" placeholder="Enter Your Password">
 
     <button type="submit">Submit</button>
-   {% comment %} Data is sent like: username=ean&password=123 {% endcomment %}
+    Data is sent like: username=ean&password=123 
   </form>
-</div>
-
-
-</body>
-</html>
-
+</div> {% endcomment %}

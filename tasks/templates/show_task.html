@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
 </head>
 <body>
     <div>
-         <ol>
+         <ol> {% endcomment %}
         {% comment %}#here tasks is full table of Task and task is the only one obj {% endcomment %}
         {% comment %} {{tasks}} {% endcomment %}
     {% comment %} {% for project in tasks  %}            {% endcomment %}
@@ -21,10 +21,33 @@
 
              </li> {% endcomment %}
          {% comment %} {% endfor %} {% endcomment %}
-         </ol>
+         {% comment %} </ol>
     </div>
-    {{tasks}}
+    {{tasks}} {% endcomment %}
 
     {% comment %} {{task1.title}} {% endcomment %}
+{% comment %} </body>
+</html> {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+       <ol>
+            {% for project in projects %}
+                <li>
+                    <p>{{project.name}}</p>
+                    <p>{{project.num_task}}</p>
+                </li>
+            {% endfor %}
+            </ol> 
+            {% comment %} <p>{{task_count}}</p> {% endcomment %}
+    </div>
 </body>
 </html>

@@ -1,18 +1,14 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-<link rel="stylesheet" href="{% static "CSS/output.css" %}">
-</head>
-<body>
-    <h1>Welcome to Authentication</h1>
+{% extends "base.html" %}
 
-
+{% block content %}
     {% comment %} Read form field Documentation {% endcomment %}
-<div>
+
+<div class="w-1/2 mx-auto my-9">
+{% if messages %}
+{% for message in messages %}
+   <div class="px-2 py-1 {% if message.tags == 'success' %} bg-green-500{% endif%}">{{message}}</div>
+{% endfor %}
+{% endif %}
 
     {% comment %} non-field-error {% endcomment %}
     {% if form.non_field_errors %}
@@ -42,13 +38,11 @@
         </p>
         {% endfor %}
 
-        <button type="submit">Sign_up</button>
+        <button type="submit" class="bg-blue-500 px-2 py-1 rounded text-white mt-3">Sign_up</button>
     </form>
 </div>
 
-
-</body>
-</html>
+{% endblock content %}
 
 
 

@@ -2,7 +2,7 @@
      
      {% block tasks %}
      <!-- Task Table  -->
-        <div class="bg-white rounded-xl shadow-sm mt-8">
+        <div class="bg-white rounded-xl shadow-sm my-8">
           <div
             class="grid grid-cols-4 p-4 border-b border-gray-100 text-sm text-gray-500"
           >
@@ -20,10 +20,16 @@
               <div class="flex items-center gap-2">
                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
 
+
+  {% comment %} Task Details {% endcomment %}
+                 <a href="{% url "task_details" task.id %}">{{task.title}}</a>
+
+
                 {% comment %} Update_task {% endcomment %}
-                <span>{{task.title}}</span> 
                 <a href="{% url "update_task" task.id %}" class="px-2 py-1 bg-green-300">Edit</a>
                 
+
+
                 {% comment %} Delete_task {% endcomment %}
                 <form action="{% url "delete_task" task.id %}"method="POST">
                   {% csrf_token %}

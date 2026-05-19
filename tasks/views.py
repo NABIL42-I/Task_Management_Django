@@ -5,17 +5,42 @@ from tasks.models import *
 from datetime import date
 from django.db.models import Q,Count
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required,user_passes_test,permission_required
 
 
 
+def is_manager(user):
+    return user.groups.filter(name='Manager').exists()
 
+def is_employee(user):
+    return user.groups.filter(name='Employee').exists()
+
+def is_admin(user):
+    return user.groups.filter(name='Admin').exists()
+
+
+# def dashboard(request):
+#     return render(request,"Dashboard/dashboard.html")
+
+@login_required
 def dashboard(request):
-    return render(request,"Dashboard/dashboard.html")
+    if is_admin(request.user):
+        return redirect('admin_dashboard')
+    elif is_manager(request.user):
+        return redirect('manager_dashboard')
+    elif is_employee(request.user):
+        return redirect('employee_dashboard')
+   
+
+    return redirect('no_permission')
 
 
 
-#Read Query
-def manager(request):
+
+
+#Read Query ->CRUD
+@user_passes_test(is_manager,login_url='no_permission')
+def manager_dashboard(request):
     #Getting task count
     # total_tasks = tasks.count()
     # pending = tasks.filter(status="PENDING").count()
@@ -59,26 +84,17 @@ def manager(request):
 
 
 
-
-def user(request):
+@user_passes_test(is_employee,login_url='no_permission')
+def employee_dashboard(request):
     return render(request,"Dashboard/user_d.html")
 
-def test_static(request):
-    return render(request,"Dashboard/test_static.html")
-
-def test(request):
-    print("Hello this  is work in back-end")
-    context={
-        "Name":["Hello","I","am","here"],
-        "age" :["Age","doesn't","matter"],
-        "front":["Hello this is in front-end"]
-    }
-    return render(request,"test.html",context)
 
 
 
-#Create Task Form
-def task_form(request):
+#Create Task Form ->CRUD
+login_required
+@permission_required("tasks.add_task",login_url='no_permission')
+def create_task(request):
     # employees = Employee.objects.all()
     # Create object
     task_form = TaskModelForm()
@@ -103,33 +119,45 @@ def task_form(request):
 
 
 
-#Update Task Form
+
+# update_task = login_required(
+#     permission_required("tasks.change_task", login_url='no_permission')(update_task)
+# )
+#This view has some problem 
+#Update Task Form -> CRUD
+login_required
+@permission_required("tasks.change_task",login_url='no_permission')
 def update_task(request,id):
     task=Task.objects.get(id=id)
-    task_form = TaskModelForm( instance=task)
+    task_form = TaskModelForm(instance=task)
+    #this condition is problemetic
     if task.New_Details : #if task.New_Details exit?
         task_detail_form = TaskDetailModelForm(instance=task.New_Details)
-      
-
+        # try: #try to solve with this
+        #    detail = task.New_Details
+        # except Task_detail.DoesNotExist:
+        #    detail = None
     if request.method == "POST":
         task_form = TaskModelForm(request.POST,instance=task)
         task_detail_form = TaskDetailModelForm(request.POST,instance=task.New_Details)
-        
         #Data  Validate & clean
         if task_form.is_valid() and task_detail_form.is_valid():
             task = task_form.save()
             task_detail_form = task_detail_form.save(commit=False)
             task_detail_form.task = task
             task_detail_form.save()
-            
             # return HttpResponse("HI")
             messages.success(request, "Task Updated Successfully")
             return redirect('update_task',id)
-        
     context={"task_form":task_form , "task_detail_form":task_detail_form}
     return render(request,"task_form.html",context)
 
-#Delete task form
+
+
+
+#Delete task form -> CRUD
+login_required
+@permission_required("tasks.delete_task",login_url='no_permission')
 def delete_task(request,id):
     if request.method =="POST":
         task = Task.objects.get(id=id)
@@ -143,8 +171,8 @@ def delete_task(request,id):
 
 
 
-
-
+login_required
+@permission_required("tasks.view_task",login_url='no_permission')
 def view_task(request):
     #retrive all data from tasks model
     tasks = Task.objects.all()
@@ -160,7 +188,7 @@ def view_task(request):
     # tasks = Task_detail.objects.exclude(priority='L')
 
     '''show the task that contain word 'o' and  status='IN_Progress'''
-    tasks = Task.objects.filter(title__icontains="O",status='IN_PROGRESS')
+    # tasks = Task.objects.filter(title__icontains="O",status='IN_PROGRESS')
 
     '''show the task that contain word 'o' OR  status='IN_Progress'''
     # tasks = Task.objects.filter(Q(title__icontains="O")|Q(status='IN_PROGRESS'))
@@ -168,8 +196,18 @@ def view_task(request):
     # tasks= Task.objects.select_related('New_Details').all()
     # tasks = Project.objects.prefetch_related('task_set').all()   
 
-    tasks= Task.objects.aggregate(num=Count('title'))
-    return render(request,"show_task.html",{"tasks":tasks,"hi":5})
+    # tasks= Task.objects.aggregate(num=Count('title'))
+
+    projects = Project.objects.annotate(
+    num_task=Count('task')).order_by('num_task')
+    return render(request, "show_task.html", {"projects": projects})
+
+
+login_required
+@permission_required("tasks.view_task",login_url='no_permission')
+def task_details(request,task_id):
+    task = Task.objects.get(id=task_id)
+    return render(request,'task_details.html',{'task':task})
 
 
 

@@ -1,8 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Permission,Group
 import re
 from tasks.forms import StyleForMixin
+from django.contrib.auth.forms import AuthenticationForm
+
 
 # class RegisterForm(UserCreationForm):
 #     class Meta: #can change the behaviour of class
@@ -100,3 +102,27 @@ class CustomRegistrationForm(StyleForMixin,forms.ModelForm):
 
      
 #########################Login####################################
+class loginForm(StyleForMixin, AuthenticationForm):
+   def __init__(self, *args, **kwargs):
+      super().__init__(*args, **kwargs)
+   
+
+###########Assigned-role Form###########################
+class AssignRoleForm(StyleForMixin,forms.Form):
+   role = forms.ModelChoiceField( # To choiceMultiple Field
+      queryset=Group.objects.all(),
+      empty_label="Select a Role",
+   )
+
+class CreateGroupForm(StyleForMixin,forms.ModelForm):
+   permissions = forms.ModelMultipleChoiceField(
+      queryset=Permission.objects.all(),
+      widget=forms.CheckboxSelectMultiple,
+      required =False,
+      label = 'Assign Permission'
+   )
+
+   class Meta:
+      model = Group
+      fields = ['name','permissions']
+   
