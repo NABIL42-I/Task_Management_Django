@@ -3,8 +3,8 @@
 {% block content %}
 <body class="bg-gray-50">
     <div class="container mx-auto px-4 py-8 max-w-7xl">
-        {% comment %} font-bold {% endcomment %}
-      <h1 class="text-3xl  mb-6">{{task.title|upper}}
+        {% comment %}  {% endcomment %}
+      <h1 class="text-3xl font-semibold mb-6">{{task.title|upper}}
 
       </h1>
 
@@ -28,24 +28,35 @@
           </svg>
           Task Detail
         </button>
-        <div class="flex items-center gap-2">
-          <select
-            name="task_status"
-            id="task_status"
-            class="px-4 py-2 border rounded-md"
-          >
-            <option value="pending">Pending</option>
-            <option value="in_progress">In Progress</option>
-            <option value="completed">Completed</option>
-          </select>
-          <button
-            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            type="submit"
-          >
-            Change Status
-          </button>
-        </div>
+
+
+
+        {% comment %} TASK Flex {% endcomment %}
+    <div class="flex items-center gap-2">
+        <form method="post" >
+            {% csrf_token %}
+            <select
+                name="task_status"
+                id="task_status"
+                class="px-4 py-2 border rounded-md"
+                >
+                {% for value,label in status_choices %}
+                <option value="{{value}}">{{label}}</option>
+                {% endfor %}
+            
+            </select>
+            <button
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                type="submit"
+                >
+                Change Status
+            </button>
+        </form>
+    </div>
       </div>
+
+
+
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Main Content -->
@@ -82,29 +93,43 @@
               {% for emp in task.assigned_to.all %}
                 <div class="flex items-center gap-4">
                   <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white">
-                    {{emp.name | slice:':1'}}
+                    {{emp.username | slice:':1'}}
+                    {% comment %} {{emp.first_name | slice:':1'}} {% endcomment %}
                   </div>
                   <div>
-                    <div class="font-semibold">{{emp.name}}</div>
-                    <div class="text-gray-600">Created Soon</div>
+                    <div class="font-semibold">{{emp.username}}</div>
+                    <div class="text-gray-600">{{emp.groups.first.name | default:"No Group Assigned"}}</div>
                   </div>
                 </div>
               {% endfor %}
-
-
-
               </div>
             </div>
-            <div>
+
+
+            <div class="flex items-center gap-4" >
+                {% comment %} Update_task {% endcomment %}
+                <a href="{% url "update_task" task.id %}" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-red-600">Edit</a>
+
+                 {% comment %} Delete_task {% endcomment %}
+                <form action="{% url "delete_task" task.id %}"method="POST">
+                  {% csrf_token %}
               <button
-                class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-red-600"
                 type="submit"
               >
                 Delete Task
-              </button>
+              </button>        
+            </form>
             </div>
+
+        
+
           </div>
         </div>
+
+
+
+
 
         <!-- Sidebar -->
         <div class="lg:col-span-1">
@@ -121,7 +146,7 @@
             <h2 class="text-xl font-bold mb-4">ASSETS</h2>
             <div class="space-y-4">
               <img
-                src="/placeholder.svg?height=200&width=300"
+                src="{{task.New_Details.asset.url}}"
                 alt="Task Manager App Screenshot 1"
                 class="w-full rounded-lg"
               />

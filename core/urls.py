@@ -3,6 +3,7 @@ from .views import home,no_permission
 
 
 urlpatterns = [
-   path("home/",home,name='home'),
-   path("no_permission/",no_permission,name="no_permission")
+   # path("home/",home,name='home'),
+   path("no_permission/",no_permission,name="no_permission"),
+   
 ]

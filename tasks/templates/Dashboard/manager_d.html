@@ -13,6 +13,10 @@
           </div>
           <!-- Task Items  -->
           <div class="divide-y divide-gray-100">
+
+
+
+
             <!-- Task 1 -->
             {% for task in tasks %}
 
@@ -21,20 +25,15 @@
                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
 
 
-  {% comment %} Task Details {% endcomment %}
+                {% comment %} Task Details {% endcomment %}
                  <a href="{% url "task_details" task.id %}">{{task.title}}</a>
 
 
-                {% comment %} Update_task {% endcomment %}
-                <a href="{% url "update_task" task.id %}" class="px-2 py-1 bg-green-300">Edit</a>
+
                 
 
 
-                {% comment %} Delete_task {% endcomment %}
-                <form action="{% url "delete_task" task.id %}"method="POST">
-                  {% csrf_token %}
-                  <button class="px-2 py-1 bg-red-300">Delete</button>
-                </form>
+               
 
  {% comment %} <form action="{% url "update_task" task.id %}" method="POST">
                   {% csrf_token %}
@@ -54,7 +53,7 @@
 
                {% for emp in task.assigned_to.all %}
                 <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm border-2 border-white">
-                  {{ emp.name|slice:":2" }}
+                  {{ emp.username|slice:":2" }}
                 </div>
                 {% endfor %}
 

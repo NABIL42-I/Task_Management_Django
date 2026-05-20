@@ -3,7 +3,7 @@ from . import views
 # from tasks.views import manager
 
 urlpatterns =[
-    path("dashboard/",views.dashboard),
+    path("dashboard",views.dashboard,name="dashboard"),
     path("manager_dashboard/",views.manager_dashboard,name="manager_dashboard"),
     path("employee_dashboard/",views.employee_dashboard,name='employee_dashboard'),
     path("create_task/",views.create_task,name='create_task'),
@@ -12,7 +12,6 @@ urlpatterns =[
     path("update_task/<int:id>/",views.update_task,name="update_task"),
     path("delete_task/<int:id>/",views.delete_task,name="delete_task")
     
-
 ]
     #Dynamic 
     # path('show-task/',views.show),

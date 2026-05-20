@@ -22,6 +22,7 @@
   </head>
   <body class="font-sans bg-gray-100">
 
+{% comment %} Condition for Logged and Unlogged User {% endcomment %}
     {% if request.user.is_authenticated %}
     {% include "logged_nav.html" %}
     {% else %}

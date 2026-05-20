@@ -21,45 +21,45 @@ class TaskForm(forms.Form):
 
 
 """ Mixing to apply style to form field"""
+#styledformMixin
 class StyleForMixin:
-    def __init__(self,*args,**kwargs):
-      super().__init__(*args,**kwargs) #Unpack
-      self.apply_styled_widgets()
+    """ Mixing to apply style to form field"""
 
-    default_classes = "border border-gray-300 w-full rounded-lg shadow-md focus:border-red-800 focus:ring-rose-500"
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
+        self.apply_styled_widgets()
+
+    default_classes = "border-2 border-gray-300 w-full p-3 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500"
 
     def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
-            # print(field_name)
-            label = field.label or field_name
-            if isinstance(field.widget,forms.TextInput):
+            if isinstance(field.widget, forms.TextInput):
                 field.widget.attrs.update({
-                    'class':self.default_classes,
-                    'placeholder':f"Enter {field.label.lower()}"
+                    'class': self.default_classes,
+                    'placeholder': f"Enter {field.label.lower()}"
                 })
-
-            # elif field.widget.input_type == 'password':
-            elif isinstance(field.widget,forms.PasswordInput):
-             field.widget.attrs.update({ 'class': self.default_classes,  'placeholder': f"Enter {label.lower()}" })
-
-            elif isinstance(field.widget,forms.Textarea):
+            elif isinstance(field.widget, forms.Textarea):
                 field.widget.attrs.update({
-                    'class':self.default_classes,
-                    'placeholder':f"Enter {field.label.lower()}",
-                    'rows':5
+                    'class': f"{self.default_classes} resize-none",
+                    'placeholder':  f"Enter {field.label.lower()}",
+                    'rows': 5
                 })
-            elif isinstance(field.widget,forms.SelectDateWidget):
-                # print("inside",field_name)
+            elif isinstance(field.widget, forms.SelectDateWidget):
+                print("Inside Date")
                 field.widget.attrs.update({
-                    'class':"border border-gray-300 bg-red-300   rounded-lg shadow-md focus:border-red-800 focus:ring-rose-500"
+                    "class": "border-2 border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:border-rose-500 focus:ring-rose-500"
                 })
-            elif isinstance(field.widget,forms.CheckboxSelectMultiple):
+            elif isinstance(field.widget, forms.CheckboxSelectMultiple):
+                print("Inside checkbox")
                 field.widget.attrs.update({
-                    'class':"space-y-2"
+                    'class': "space-y-2"
                 })
             else:
-                field.widget.attrs.update({ 'class': self.default_classes,  'placeholder': f"Enter {label.lower()}" })
-                
+                print("Inside else")
+                field.widget.attrs.update({
+                    'class': self.default_classes
+                })
+
 
 
 #Django Model Form
@@ -99,8 +99,55 @@ class TaskModelForm(StyleForMixin, forms.ModelForm):
 class TaskDetailModelForm(StyleForMixin,forms.ModelForm):
     class Meta:
         model = Task_detail
-        fields = ["priority","notes"]
+        fields = ["priority","notes","asset"]
     # def __init__(self,*args,**kwargs):
     #     super().__init__(*args,**kwargs) #Unpack
     #     self.apply_styled_widgets()
 
+
+
+
+
+
+
+
+# """ Mixing to apply style to form field"""
+# class StyleForMixin:
+#     def __init__(self,*args,**kwargs):
+#       super().__init__(*args,**kwargs) #Unpack
+#       self.apply_styled_widgets()
+
+#     default_classes = "border border-gray-300 w-full rounded-lg shadow-md focus:border-red-800 focus:ring-rose-500"
+
+#     def apply_styled_widgets(self):
+#         for field_name, field in self.fields.items():
+#             # print(field_name)
+#             label = field.label or field_name
+#             if isinstance(field.widget,forms.TextInput):
+#                 field.widget.attrs.update({
+#                     'class':self.default_classes,
+#                     'placeholder':f"Enter {field.label.lower()}"
+#                 })
+
+#             # elif field.widget.input_type == 'password':
+#             elif isinstance(field.widget,forms.PasswordInput):
+#              field.widget.attrs.update({ 'class': self.default_classes,  'placeholder': f"Enter {label.lower()}" })
+
+#             elif isinstance(field.widget,forms.Textarea):
+#                 field.widget.attrs.update({
+#                     'class':self.default_classes,
+#                     'placeholder':f"Enter {field.label.lower()}",
+#                     'rows':5
+#                 })
+#             elif isinstance(field.widget,forms.SelectDateWidget):
+#                 # print("inside",field_name)
+#                 field.widget.attrs.update({
+#                     'class':"border border-gray-300 bg-red-300   rounded-lg shadow-md focus:border-red-800 focus:ring-rose-500"
+#                 })
+#             elif isinstance(field.widget,forms.CheckboxSelectMultiple):
+#                 field.widget.attrs.update({
+#                     'class':"space-y-2"
+#                 })
+#             else:
+#                 field.widget.attrs.update({ 'class': self.default_classes,  'placeholder': f"Enter {label.lower()}" })
+                
