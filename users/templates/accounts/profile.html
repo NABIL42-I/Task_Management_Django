@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load custom_filters %}
 {% block title %}Profile{% endblock title %}
-
 {% block content %}
   <div class="bg-gray-100">
     <div class="flex min-h-screen">
@@ -16,10 +15,10 @@
             class="block py-2 px-4 text-gray-700 bg-gray-200 hover:bg-gray-300"
             >Profile</a
           >
-          <a href="#" class="block py-2 px-4 text-gray-700 hover:bg-gray-200"
+          <a href="{% url 'edit_profile' %}" class="block py-2 px-4 text-gray-700 hover:bg-gray-200"
             >Edit Profile</a
           >
-          <a href="{% url "password_change" %}" class="block py-2 px-4 text-gray-700 hover:bg-gray-200"
+          <a href="{% url 'password_change' %}" class="block py-2 px-4 text-gray-700 hover:bg-gray-200"
             >Change Password</a
           >
         </nav>
@@ -31,13 +30,22 @@
 
         <div class="bg-white shadow-md rounded-lg p-6">
           <div class="flex items-center mb-6">
+
+        {% if profile_image %}
             <img
-              src="https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png"
-              alt="User Avatar"
-              class="w-24 h-24 rounded-full object-cover mr-6"
+                src="{{ profile_image.url }}"
+                alt="User Avatar"
+                class="w-24 h-24 rounded-full object-cover mr-6"
             />
-            <div>       
-                                            {% comment %} use this instead of {{request.user.username}} {% endcomment %}
+        {% else %}
+            <img
+                src="/media/task_asset/default.jpeg"
+                alt="Default Avatar"
+                class="w-24 h-24 rounded-full object-cover mr-6"
+            />
+        {% endif %}
+
+            <div>
               <h2 class="text-2xl font-semibold text-gray-800">{{name}}</h2>
               <p class="text-gray-600">Software Developer</p>
             </div>
@@ -49,10 +57,10 @@
                 Personal Information
               </h3>
               <p class="text-gray-600">
-                <span class="font-medium">Email:</span> {{email}}
+                <span class="font-medium">Email:</span> {{ email }}
               </p>
               <p class="text-gray-600">
-                <span class="font-medium">Username:</span> {{username}}
+                <span class="font-medium">Username:</span> {{ username }}
               </p>
               <p class="text-gray-600">
                 <span class="font-medium">Location:</span> New York, USA
@@ -63,10 +71,10 @@
                 Account Information
               </h3>
               <p class="text-gray-600">
-                <span class="font-medium">Member Since:</span>{{member_since|humanized_date}}
+                <span class="font-medium">Member Since:</span> {{member_since|humanized_date}}
               </p>
               <p class="text-gray-600">
-                <span class="font-medium">Last Login:</span>{{last_login|humanized_date}}
+                <span class="font-medium">Last Login:</span> {{last_login|humanized_date}}
               </p>
             </div>
           </div>
@@ -74,13 +82,11 @@
           <div class="mt-6">
             <h3 class="text-lg font-semibold text-gray-700 mb-2">Bio</h3>
             <p class="text-gray-600">
-              Passionate software developer with 5 years of experience in web
-              technologies. Loves to create user-friendly and efficient
-              applications. In free time, enjoys hiking and reading tech blogs.
+             {{bio}}
             </p>
           </div>
         </div>
       </main>
     </div>
-</div>
-{% endblock content %}
+  </div>
+  {% endblock content %}

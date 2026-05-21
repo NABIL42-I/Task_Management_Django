@@ -16,8 +16,6 @@ def send_activation_email(sender,instance,created,**kwargs):
         subject = 'Activate Your Account'
         message = f'Hi {instance.username} \n\nPlease activate your account by clicking the link below:\n\n{activation_url}\n\nThank You!'
         recipient_list = [instance.email]
-
-
         try:
             send_mail(subject,message,settings.EMAIL_HOST_USER,recipient_list)
 
@@ -40,4 +38,3 @@ def assign_role(sender,instance,created,**kwargs):
 def create_or_update_user_profile(sender,instance,created,**kwarges):
     if created:
         UserProfile.objects.create(user=instance)
-    instance.userprofile.save()

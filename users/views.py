@@ -4,16 +4,62 @@ from django.contrib.auth.models import User,Group
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.tokens import default_token_generator
 # from .forms import RegisterForm
-from users.forms import CustomRegistrationForm,AssignRoleForm,CreateGroupForm
+from users.forms import CustomRegistrationForm,AssignRoleForm,CreateGroupForm,EditProfileForm
 from users.forms import loginForm,CustomChangePasswordForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.db.models import Prefetch
 from django.contrib.auth.views import LoginView,PasswordChangeView,PasswordResetConfirmView
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordResetView
 from django.urls import reverse_lazy
+from .models import UserProfile
+
+
+
+
+
+class EditProfileView(UpdateView):
+    model = User
+    form_class = EditProfileForm
+    template_name = 'accounts/update_profile.html'
+    context_object_name = 'form'
+    def get_object(self):
+        return self.request.user
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['userprofile'] = UserProfile.objects.get(user=self.request.user)
+        return kwargs
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_profile = UserProfile.objects.get(user=self.request.user)
+        print("views", user_profile)
+        context['form'] = self.form_class(
+            instance=self.object, userprofile=user_profile)
+        return context
+    def form_valid(self, form):
+        form.save(commit=True)
+        return redirect('profile')
+
+
+# @login_required
+class ProfileView(LoginRequiredMixin,TemplateView):
+    template_name = 'accounts/profile.html'
+    # return context to template
+    #Internally Handles GET() Method
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user # get current logged user obj
+        context['username']=user.username
+        context['email']=user.email
+        context['name']=user.get_full_name()
+        context['member_since']=user.date_joined
+        context['last_login']=user.last_login
+        context['bio'] = user.userprofile.bio
+        context['profile_image'] = user.userprofile.profile_image
+        return context
+
 
 
 
@@ -149,20 +195,6 @@ def group_list(request):
     return render(request,'admin/group_list.html',{'groups':groups})
 
 
-# @login_required
-class ProfileView(LoginRequiredMixin,TemplateView):
-    template_name = 'accounts/profile.html'
-    # return context to template
-    #Internally Handles GET() Method
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user # get current logged user obj
-        context['username']=user.username
-        context['email']=user.email
-        context['name']=user.get_full_name()
-        context['member_since']=user.date_joined
-        context['last_login']=user.last_login
-        return context
 
 
 class ChangePassword(PasswordChangeView):
