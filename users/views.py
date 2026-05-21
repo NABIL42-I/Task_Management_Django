@@ -5,10 +5,17 @@ from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.tokens import default_token_generator
 # from .forms import RegisterForm
 from users.forms import CustomRegistrationForm,AssignRoleForm,CreateGroupForm
+from users.forms import loginForm,CustomChangePasswordForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm
 from django.contrib import messages
-from users.forms import loginForm
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.db.models import Prefetch
+from django.contrib.auth.views import LoginView,PasswordChangeView,PasswordResetConfirmView
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.views import PasswordResetView
+from django.urls import reverse_lazy
+
+
 
 #Test for user
 def is_admin(user):
@@ -50,8 +57,13 @@ def sign_in(request):
                 print("User name none")
         else:
             print("Not valid")
-
     return render(request,'registration/sign_in.html',{'form':form})
+
+class CustomLoginView(LoginView):
+    form_class = loginForm
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        return next_url if next_url else super().get_success_url()
 
 
 @login_required #Enforce User to Login
@@ -80,6 +92,7 @@ def activate_user(request,user_id,token):
 
     #########DashBoard for User (Role Based Access Control)
 
+@login_required
 @user_passes_test(is_admin,login_url='no_permission')
 def admin_dashboard(request):
     # users = User.objects.all()  #or use this
@@ -136,15 +149,58 @@ def group_list(request):
     return render(request,'admin/group_list.html',{'groups':groups})
 
 
+# @login_required
+class ProfileView(LoginRequiredMixin,TemplateView):
+    template_name = 'accounts/profile.html'
+    # return context to template
+    #Internally Handles GET() Method
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user # get current logged user obj
+        context['username']=user.username
+        context['email']=user.email
+        context['name']=user.get_full_name()
+        context['member_since']=user.date_joined
+        context['last_login']=user.last_login
+        return context
 
 
+class ChangePassword(PasswordChangeView):
+    form_class = CustomChangePasswordForm
 
 
+#implement pass-1
+#PasswordResetView
+#PasswordResetDonwView
+# give_form,Send_mail
+class CustomResetPassword(PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = "registration/reset_password.html"
+    #customPasswordoneview
+    success_url = reverse_lazy('sign_in')#like reture redirect
+    html_email_template_name='registration/reset_email.html'
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['protocol']='https'if self.request.is_secure() else 'http'
+        context['domain'] = self.request.get_host()
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request,'A reset email sent. Please Check Your Email')
+        return super().form_valid(form)
+    def form_invalid(self, form):
+        messages.error(self.request, "Something went wrong")
+        return super().form_invalid(form)
 
 
-
-
-
+#implement pass-2
+class CustomPasswordResetConfirm(PasswordResetConfirmView):
+    form_class = CustomPasswordResetConfirmForm
+    template_name = "registration/reset_password.html"
+    success_url = reverse_lazy('sign_in')#like reture redirect
+    def form_valid(self, form):
+        messages.success(self.request,'Password reset Successfully')
+        return super().form_valid(form)
 
 
 

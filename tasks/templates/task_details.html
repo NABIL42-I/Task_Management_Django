@@ -145,11 +145,15 @@
           <div class="bg-white p-6 rounded-lg shadow-sm">
             <h2 class="text-xl font-bold mb-4">ASSETS</h2>
             <div class="space-y-4">
-              <img
-                src="{{task.New_Details.asset.url}}"
-                alt="Task Manager App Screenshot 1"
+                {% if task.New_Details.asset %}
+                <img
+                src="{{ task.New_Details.asset.url }}"
+                alt="Task Asset"
                 class="w-full rounded-lg"
-              />
+                />
+                {% else %}
+                <p>No asset uploaded.</p>
+                {% endif %}
             </div>
           </div>
         </div>
